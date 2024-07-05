@@ -1,33 +1,34 @@
 const express = require("express");
 const router = express.Router();
 const FollowRequest = require("../models/FollowRequest.model");
+const isAuth = require("../middlewares/isAuth");
 
-// Create a follow request
-router.post("/", async (req, res) => {
+// create
+router.post("/:userId", isAuth, async (req, res, next) => {
   try {
-    const { fromUser, toUser } = req.body;
-    const newRequest = new FollowRequest({ fromUser, toUser });
-    await newRequest.save();
+    const newRequest = await FollowRequest.create({
+      fromUser: req.userId,
+      toUser: req.params.userId,
+    });
     res.status(201).json(newRequest);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    next(error);
   }
 });
 
-// Update follow request status (e.g., accept or reject the request)
-router.put("/:id", async (req, res) => {
+// update
+router.put("/:id", isAuth, async (req, res, next) => {
   try {
-    const { status } = req.body; // "accepted" or "rejected"
-    const followRequest = await FollowRequest.findById(req.params.id);
-    if (followRequest) {
-      followRequest.status = status;
-      await followRequest.save();
-      res.status(200).json(followRequest);
-    } else {
-      res.status(404).json({ message: "Follow request not found" });
-    }
+    const { status } = req.body;
+
+    const followRequest = await FollowRequest.findOneAndUpdate(
+      { _id: req.params.id, toUser: req.userId },
+      { status },
+      { new: true }
+    );
+    res.status(202).json(followRequest);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    next(error);
   }
 });
 

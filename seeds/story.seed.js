@@ -5,11 +5,11 @@ require("dotenv").config({ path: path.join(__dirname, "..", ".env") });
 
 const Story = require("../models/Story.model");
 const User = require("../models/User.model");
-
+const bcrypt = require("bcryptjs");
 const MONGO_URI =
   process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/my-flash-backend";
 
-const password = "password";
+const password = bcrypt.hashSync("password", 12);
 
 const users = [
   {

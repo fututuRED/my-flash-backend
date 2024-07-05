@@ -23,17 +23,19 @@ const userSchema = new Schema(
       type: String,
       default: "images/default-avatar.png",
     },
-    stories: {
-      type: [{ type: Schema.Types.ObjectId, ref: "Story" }],
-      default: [],
-    },
-    friends: {
-      type: [{ type: Schema.Types.ObjectId, ref: "User" }],
-      default: [],
-    },
+    friends: [
+      {
+        type: { type: Schema.Types.ObjectId, ref: "User" },
+        default: [],
+      },
+    ],
   },
   { timestamps: true }
 );
+
+userSchema.methods.isFriendWith = function (userId) {
+  return this.friends.includes(userId);
+};
 
 const User = model("User", userSchema);
 

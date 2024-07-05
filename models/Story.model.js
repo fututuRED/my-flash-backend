@@ -25,6 +25,11 @@ const storySchema = new Schema(
       ref: "User",
       required: true,
     },
+    status: {
+      type: String,
+      enum: ["Private", "Public"],
+      default: "Public",
+    },
   },
   { timestamps: true }
 );
