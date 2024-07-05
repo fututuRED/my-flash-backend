@@ -2,7 +2,6 @@ const express = require("express");
 const router = express.Router();
 const User = require("../models/User.model");
 const isAuth = require("../middlewares/isAuth");
-const isFriend = require("../middlewares/isFriend");
 
 router.get("/", isAuth, async (req, res, next) => {
   try {
@@ -14,7 +13,7 @@ router.get("/", isAuth, async (req, res, next) => {
 });
 
 // GET one user
-router.get("/:id", async (req, res, next) => {
+router.get("/:id", isAuth, async (req, res, next) => {
   try {
     const { id } = req.params;
     const oneUser = await User.findOne({ _id: id }).populate("stories friends");
@@ -36,13 +35,14 @@ router.post("/", async (req, res, next) => {
   }
 });
 //update
-router.put("/:id", async (req, res, next) => {
+router.put("/me", isAuth, async (req, res, next) => {
   try {
     const { username, avatarUrl } = req.body;
-    const { id } = req.params;
+    const userToUpdate = { username, avatarUrl };
 
     const updatedUser = await User.findOneAndUpdate(
-      { _id: id },
+      { _id: req.userId },
+      userToUpdate,
       {
         new: true,
       }
@@ -53,7 +53,7 @@ router.put("/:id", async (req, res, next) => {
   }
 });
 // delete
-router.delete("/:id", async (req, res, next) => {
+router.delete("/:id", isAuth, async (req, res, next) => {
   try {
     const { id } = req.params;
     const userToDelete = await User.findOneAndDelete({

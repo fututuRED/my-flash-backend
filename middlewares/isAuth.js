@@ -16,5 +16,4 @@ async function isAuth(req, res, next) {
     return res.status(400).json({ message: "Invalid token", error: error });
   }
 }
-
 module.exports = isAuth;
