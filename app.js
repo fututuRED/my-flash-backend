@@ -11,16 +11,17 @@ const express = require("express");
 
 const cors = require("cors");
 const app = express();
-app.use(express.json());
-
-// ℹ️ This function is getting exported from the config folder. It runs most pieces of middleware
-require("./config")(app);
-
 app.use(
   cors({
     origin: ["http://localhost:5173"],
   })
 );
+
+app.use(express.json());
+
+// ℹ️ This function is getting exported from the config folder. It runs most pieces of middleware
+require("./config")(app);
+
 // 👇 Start handling routes here
 const authRoutes = require("./routes/authRoutes");
 app.use("/auth", authRoutes);
