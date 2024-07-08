@@ -5,9 +5,13 @@ const isFriend = async (req, res, next) => {
       .status(403)
       .json({ message: "You must be logged in to access this endpoint" });
   }
-
+  const targetUserId = req.params.userId;
+  if (req.userId === targetUserId) {
+    return next();
+  }
   try {
-    const targetUserId = req.params.userId;
+    console.log("User ID from token (req.userId):", req.userId);
+    console.log("Target user ID from params:", targetUserId);
     const isFriend = await FollowRequest.exists({
       status: "Accepted",
       $or: [
@@ -19,8 +23,7 @@ const isFriend = async (req, res, next) => {
         },
       ],
     });
-    console.log(req.userId, targetUserId);
-    console.log(isFriend);
+    console.log("Friendship existence result:", isFriend);
     // const user = await
     if (!isFriend) {
       return res
@@ -35,6 +38,7 @@ const isFriend = async (req, res, next) => {
 
     next();
   } catch (error) {
+    console.log("Error in isFriend middleware:", error);
     next(error);
   }
 };

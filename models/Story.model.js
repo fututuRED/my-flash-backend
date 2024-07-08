@@ -3,8 +3,8 @@ const { Schema, model } = require("mongoose");
 const storySchema = new Schema(
   {
     emoticon: {
-      type: String,
-      default: "",
+      type: Array,
+      default: [],
     },
     shape: {
       type: String,
