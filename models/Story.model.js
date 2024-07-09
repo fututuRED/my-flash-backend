@@ -6,7 +6,7 @@ const storySchema = new Schema(
       type: Array,
       default: [],
     },
-    shape: {
+    color: {
       type: String,
       default: "",
     },

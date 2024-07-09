@@ -27,6 +27,24 @@ router.get("/users/:userId", isAuth, isFriend, async (req, res, next) => {
   }
 });
 
+// one story if
+router.get("/:id", async (req, res, next) => {
+  const { id } = req.params;
+  try {
+    const story = await Story.findOne({ _id: id, status: "Public" });
+    if (story && story.status === "Private") {
+      return res.status(404).json({ message: "Story not found" });
+    }
+    if (story) {
+      res.status(200).json(story);
+    } else {
+      return res.status(404).json({ message: "Story not found" });
+    }
+  } catch (error) {
+    next(error);
+  }
+});
+
 //create  /private
 router.post("/", isAuth, async (req, res, next) => {
   try {
@@ -39,6 +57,7 @@ router.post("/", isAuth, async (req, res, next) => {
       author: req.userId,
       status,
     };
+    console.log("Request body:", req.body);
     const createdStory = await Story.create(storyToCreate);
     res.status(201).json(createdStory);
   } catch (error) {
