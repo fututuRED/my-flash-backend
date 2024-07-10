@@ -8,7 +8,7 @@ const isFriend = require("../middlewares/isFriend");
 // all stories (public)
 router.get("/", async (req, res, next) => {
   try {
-    const stories = await Story.find({ status: "Public" });
+    const stories = await Story.find({ status: "Public" }).populate("author");
     res.status(200).json(stories);
   } catch (error) {
     next(error); // Call the error handling middleware
@@ -16,7 +16,6 @@ router.get("/", async (req, res, next) => {
 });
 
 // get all the stories from an author / private access
-// TODO WIP
 router.get("/users/:userId", isAuth, isFriend, async (req, res, next) => {
   const { userId } = req.params;
   try {
@@ -27,11 +26,13 @@ router.get("/users/:userId", isAuth, isFriend, async (req, res, next) => {
   }
 });
 
-// one story if
+// GET one story
 router.get("/:id", async (req, res, next) => {
   const { id } = req.params;
   try {
-    const story = await Story.findOne({ _id: id, status: "Public" });
+    const story = await Story.findOne({ _id: id, status: "Public" }).populate(
+      "author"
+    );
     if (story && story.status === "Private") {
       return res.status(404).json({ message: "Story not found" });
     }
@@ -45,7 +46,7 @@ router.get("/:id", async (req, res, next) => {
   }
 });
 
-//create  /private
+//create
 router.post("/", isAuth, async (req, res, next) => {
   try {
     const { emoticon, shape, title, content, status } = req.body;
@@ -57,7 +58,6 @@ router.post("/", isAuth, async (req, res, next) => {
       author: req.userId,
       status,
     };
-    console.log("Request body:", req.body);
     const createdStory = await Story.create(storyToCreate);
     res.status(201).json(createdStory);
   } catch (error) {
