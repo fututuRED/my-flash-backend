@@ -5,7 +5,7 @@ const Reaction = require("../models/reaction.model");
 const isAuth = require("../middlewares/isAuth");
 const isFriend = require("../middlewares/isFriend");
 
-// all stories (public)
+// all stories
 router.get("/", async (req, res, next) => {
   try {
     const stories = await Story.find({ status: "Public" }).populate("author");
@@ -15,7 +15,7 @@ router.get("/", async (req, res, next) => {
   }
 });
 
-// get all the stories from an author / private access
+// all the stories from an author
 router.get("/users/:userId", isAuth, isFriend, async (req, res, next) => {
   const { userId } = req.params;
   try {
@@ -26,7 +26,7 @@ router.get("/users/:userId", isAuth, isFriend, async (req, res, next) => {
   }
 });
 
-// GET one story
+// one story
 router.get("/:id", async (req, res, next) => {
   const { id } = req.params;
   try {
@@ -98,47 +98,4 @@ router.delete("/:id", isAuth, async (req, res, next) => {
   }
 });
 
-router.post("/:id/reaction", isAuth, async (req, res, next) => {
-  const { id } = req.params;
-  const { story, user, type } = req.body;
-  const reactionToCreate = {
-    story: id,
-    user: req.userId,
-    type,
-  };
-  console.log("Reaction for Story ID:", id);
-  try {
-    if (!["Like", "Respect"].includes(type)) {
-      return res.status(400).json({ message: "Invalid reaction type" });
-    }
-    const story = await Story.findById(id);
-    if (!story) {
-      return res.status(404).json({ message: "Story not found" });
-    }
-    let existingReaction = await Reaction.findOne({
-      story: id,
-      user: req.userId,
-      type,
-    });
-
-    if (existingReaction) {
-      return res.status(400).json({
-        message: `You have already ${type.toLowerCase()}d this story`,
-      });
-    }
-
-    const newReaction = await Reaction.create({
-      reactionToCreate,
-    });
-
-    res.status(200).json({
-      message: `Story ${type.toLowerCase()}d!`,
-      reaction: newReaction,
-    });
-  } catch (error) {
-    next(error);
-  }
-});
-
-//UPDATE REACTIONS OR DELETE ??
 module.exports = router;
