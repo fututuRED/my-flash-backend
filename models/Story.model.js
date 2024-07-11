@@ -8,7 +8,7 @@ const storySchema = new Schema(
     },
     color: {
       type: String,
-      default: "",
+      default: "#FFFFFF",
     },
     title: {
       type: String,

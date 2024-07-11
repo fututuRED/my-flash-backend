@@ -49,10 +49,10 @@ router.get("/:id", async (req, res, next) => {
 //create
 router.post("/", isAuth, async (req, res, next) => {
   try {
-    const { emoticon, shape, title, content, status } = req.body;
+    const { emoticon, color, title, content, status } = req.body;
     const storyToCreate = {
       emoticon,
-      shape,
+      color,
       title,
       content,
       author: req.userId,
@@ -68,9 +68,9 @@ router.post("/", isAuth, async (req, res, next) => {
 //update
 router.put("/:id", isAuth, async (req, res, next) => {
   try {
-    const { emoticon, shape, title, content, status } = req.body;
+    const { emoticon, color, title, content, status } = req.body;
     const { id } = req.params;
-    const storyToUpdate = { emoticon, shape, title, content, status };
+    const storyToUpdate = { emoticon, color, title, content, status };
 
     const updatedStory = await Story.findOneAndUpdate(
       { _id: id, author: req.userId },
@@ -100,15 +100,21 @@ router.delete("/:id", isAuth, async (req, res, next) => {
 
 router.post("/:id/reaction", isAuth, async (req, res, next) => {
   const { id } = req.params;
-
+  const { story, user, type } = req.body;
+  const reactionToCreate = {
+    story: id,
+    user: req.userId,
+    type,
+  };
+  console.log("Reaction for Story ID:", id);
   try {
-    // Check if the user already liked the story
-
     if (!["Like", "Respect"].includes(type)) {
       return res.status(400).json({ message: "Invalid reaction type" });
     }
-    const story = await Story.findone({ _id: id });
-
+    const story = await Story.findById(id);
+    if (!story) {
+      return res.status(404).json({ message: "Story not found" });
+    }
     let existingReaction = await Reaction.findOne({
       story: id,
       user: req.userId,
@@ -122,9 +128,7 @@ router.post("/:id/reaction", isAuth, async (req, res, next) => {
     }
 
     const newReaction = await Reaction.create({
-      story: id,
-      user: req.userId,
-      type,
+      reactionToCreate,
     });
 
     res.status(200).json({
