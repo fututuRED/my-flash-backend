@@ -32,4 +32,6 @@ router.put("/:id", isAuth, async (req, res, next) => {
   }
 });
 
+//delete
+
 module.exports = router;

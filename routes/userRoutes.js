@@ -12,7 +12,6 @@ router.get("/", isAuth, async (req, res, next) => {
   }
 });
 
-// GET one user
 router.get("/:id", isAuth, async (req, res, next) => {
   try {
     const { id } = req.params;
@@ -23,7 +22,6 @@ router.get("/:id", isAuth, async (req, res, next) => {
   }
 });
 
-//create
 router.post("/", async (req, res, next) => {
   try {
     const { username, email, password, avatarUrl } = req.body;
@@ -34,7 +32,7 @@ router.post("/", async (req, res, next) => {
     next(error);
   }
 });
-//update
+
 router.put("/me", isAuth, async (req, res, next) => {
   try {
     const { username, avatarUrl } = req.body;
@@ -52,7 +50,7 @@ router.put("/me", isAuth, async (req, res, next) => {
     next(error);
   }
 });
-// delete
+
 router.delete("/:id", isAuth, async (req, res, next) => {
   try {
     const { id } = req.params;
