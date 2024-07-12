@@ -9,23 +9,24 @@ const bcrypt = require("bcryptjs");
 const MONGO_URI =
   process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/my-flash-backend";
 
-const password = bcrypt.hashSync("password", 12);
+const passwordPlain = "password";
+const saltRounds = 12;
 
 const users = [
   {
     username: "Jack",
     email: "Jack@dit.com",
-    password,
+    password: bcrypt.hashSync(passwordPlain, saltRounds),
   },
   {
     username: "Jean",
     email: "Jean@dit.com",
-    password,
+    password: bcrypt.hashSync(passwordPlain, saltRounds),
   },
   {
     username: "Jess",
     email: "Jess@dit.com",
-    password,
+    password: bcrypt.hashSync(passwordPlain, saltRounds),
   },
 ];
 
