@@ -15,7 +15,7 @@ router.get("/", isAuth, async (req, res, next) => {
 router.get("/:id", isAuth, async (req, res, next) => {
   try {
     const { id } = req.params;
-    const oneUser = await User.findOne({ _id: id }).populate("stories friends");
+    const oneUser = await User.findOne({ _id: id }).populate("stories");
     res.status(200).json(oneUser);
   } catch (error) {
     next(error);

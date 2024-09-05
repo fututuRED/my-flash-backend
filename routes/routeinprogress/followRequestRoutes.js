@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const FollowRequest = require("../models/FollowRequest.model");
-const isAuth = require("../middlewares/isAuth");
+const isAuth = require("../../middlewares/isAuth");
 
 // create
 router.post("/:userId", isAuth, async (req, res, next) => {

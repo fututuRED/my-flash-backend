@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const Story = require("../models/Story.model");
-const Reaction = require("../models/reaction.model");
+
 const isAuth = require("../middlewares/isAuth");
 const isFriend = require("../middlewares/isFriend");
 

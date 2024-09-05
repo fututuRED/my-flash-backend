@@ -4,8 +4,8 @@ const userSchema = new Schema(
   {
     username: {
       type: String,
-      maxLenght: 10,
       minLength: 3,
+      maxLenght: 10,
       required: [true, "Username required."],
     },
     email: {
@@ -22,9 +22,12 @@ const userSchema = new Schema(
       type: String,
       default: "images/default-avatar.png",
     },
-    friends: [
+    storiess: [
       {
-        type: { type: Schema.Types.ObjectId, ref: "User" },
+        type: {
+          type: Schema.Types.ObjectId,
+          ref: "Story",
+        },
         default: [],
       },
     ],
