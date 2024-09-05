@@ -3,7 +3,6 @@ const router = express.Router();
 const Story = require("../models/Story.model");
 
 const isAuth = require("../middlewares/isAuth");
-const isFriend = require("../middlewares/isFriend");
 
 // all stories
 router.get("/", async (req, res, next) => {
