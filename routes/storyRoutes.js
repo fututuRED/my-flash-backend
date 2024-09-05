@@ -15,7 +15,7 @@ router.get("/", async (req, res, next) => {
 });
 
 // all the stories from an author
-router.get("/users/:userId", isAuth, isFriend, async (req, res, next) => {
+router.get("/users/:userId", isAuth, async (req, res, next) => {
   const { userId } = req.params;
   try {
     const stories = await Story.find({ author: userId });
