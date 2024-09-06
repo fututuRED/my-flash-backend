@@ -6,9 +6,9 @@ const storySchema = new Schema(
       type: Array,
       default: [],
     },
-    backgroungColor: {
+    textColor: {
       type: String,
-      default: "#FFFFFF",
+      default: "#000000",
     },
     title: {
       type: String,
