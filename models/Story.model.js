@@ -6,10 +6,10 @@ const storySchema = new Schema(
       type: Array,
       default: [],
     },
-    textColor: {
-      type: String,
-      default: "#000000",
-    },
+    // textColor: {
+    //   type: String,
+    //   default: "#000000",
+    // },
     title: {
       type: String,
       required: true,
