@@ -48,10 +48,10 @@ router.get("/:id", async (req, res, next) => {
 //create
 router.post("/", isAuth, async (req, res, next) => {
   try {
-    const { emoticon, , title, content, status } = req.body;
+    const { emoticon, title, content, status } = req.body;
     const storyToCreate = {
       emoticon,
- 
+
       title,
       content,
       author: req.userId,
@@ -67,7 +67,7 @@ router.post("/", isAuth, async (req, res, next) => {
 //update
 router.put("/:id", isAuth, async (req, res, next) => {
   try {
-    const { emoticon,  title, content, status } = req.body;
+    const { emoticon, title, content, status } = req.body;
     const { id } = req.params;
     const storyToUpdate = { emoticon, title, content, status };
 
